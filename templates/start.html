@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body_contents %}
+<div class="unswtalk_user_details">
+{% if student_details.zid != None %}{{student_details.zid}}{% endif %}
+{% if student_details.full_name != None %}{{student_details.full_name}}{% endif %}
+{% if student_details.birthday != None %}{{student_details.birthday}}{% endif %}
+{% if student_details.friends != None %}{{student_details.friends}}{% endif %}
+{% if student_details.program != None %}{{student_details.program}}{% endif %}
+{% if student_details.home_suburb != None %}{{student_details.home_suburb}}{% endif %}
+</div>
+
+<form method="POST" action="">
+    <input type="hidden" name="n" value="7">
+    <input type="submit" value="Next student" class="unswtalk_button">
+</form>
+{% endblock %}
