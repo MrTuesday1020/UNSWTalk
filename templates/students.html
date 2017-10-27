@@ -1,0 +1,20 @@
+<link href="{{url_for('static', filename='css/profile.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+{% for student in students %}
+<div class="container search-list" onclick="location.href='profile?zid={{student.zid}}'">
+	<div class="row">
+		<div class="col-md text-center">
+			<img src="static/photos/{{student.photo}}" class="search-photo">
+		</div>
+		<div class="col-md full-name">
+			<h3>{{student.full_name}}</h3>
+		</div>
+		<div class="col-md text-center">
+			<img src="static/image/code.png" class="friend_photo more-img">
+		</div>
+	</div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,16 @@
+<link href="{{url_for('static', filename='css/postMessage.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+<div class="container bg-white post-message">
+	<form action="postMessage" method="post">
+		<div class="form-group text-center">
+		    <label for="exampleFormControlTextarea1"><h3>What are you thinking about ...</h3></label>
+		    <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+		 </div>
+		 <div class="col-md text-center">
+		 	<button type="submit" class="btn btn-primary">Make a post</button>
+		 </div>
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+<link href="{{url_for('static', filename='css/profile.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+<div class="container bg-white">
+	<div class="row info">
+		<div class="col-md text-center">
+			<img src="static/image/pic.png" class="profile-head">
+		</div>
+		<div class="col-md-6 text-center">
+			<img src="static/image/card.png" class="profile-head">
+		</div>
+		<div class="col-md text-center">
+			<img src="static/image/list.png" class="profile-head">
+		</div>
+	</div>
+	<div class="row info">
+	    <div class="col text-center">
+	    	<div class="left">
+	    		<img src="static/photos/{{session['student'].photo}}" class="photo">
+	    	</div>
+	    </div>
+	    <div class="col-6 middle">
+	    	{% if session['student'].zid != None %}
+			<div class="details">
+				<img src="static/image/info.png" class="friend_photo">
+				{{session['student'].zid}}
+			</div>
+			{% endif %}
+			{% if session['student'].full_name != None %}
+			<div class="details">
+				<img src="static/image/tag.png" class="friend_photo">
+				{{session['student'].full_name}}
+			</div>
+			{% endif %}
+			{% if session['student'].birthday != None %}
+			<div class="details">
+				<img src="static/image/birth.png" class="friend_photo">
+				{{session['student'].birthday}}
+			</div>
+			{% endif %}
+			{% if session['student'].program != None %}
+			<div class="details">
+				<img src="static/image/office.png" class="friend_photo">
+				{{session['student'].program}}
+			</div>
+			{% endif %}
+			{% if session['student'].home_suburb != None %}
+			<div class="details">
+				<img src="static/image/map.png" class="friend_photo">
+				{{session['student'].home_suburb}}
+			</div>
+			{% endif %}
+		</div>
+		<div class="col">
+			{% if friends != None %}
+			{% for friend in friends %}
+			<div class="right">
+				<a href="profile?zid={{friend.zid}}"><img src="static/photos/{{friend.photo}}" class="friend_photo">{{friend.full_name}}</a>
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="container btn-field">
+	<div class="row">
+		<div class="col text-center"><a class="btn btn-primary" href="">Edit Profile</a></div>
+		<div class="col text-center"><a class="btn btn-primary" href="">Change Password</a></div>
+		<div class="col text-center"><a class="btn btn-primary" href="">Change Photo</a></div>
+		<div class="col text-center"><a class="btn btn-danger" href="logout">Log out</a></div>
+	</div>
+</div>
+{% endblock %}

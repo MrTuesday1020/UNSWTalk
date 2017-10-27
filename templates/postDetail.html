@@ -1,0 +1,69 @@
+<link href="{{url_for('static', filename='css/postDetail.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+<div class="container bg-white post-body">
+	<div class="row">
+		<div class="col-md text-center">
+			<a href="profile?zid={{post.zid}}"><img src="static/photos/{{post.photo}}" class="photo"></a>
+	    </div>
+	    <div class="col-md-11">
+	    	<div><h3><a class="text-dark" href="profile?zid={{post.zid}}">{{post.full_name}}</a><h3></div>
+			<div>{{post.time}}</div>
+	    </div>
+	</div>
+	<div class="row message-body">
+		<div class="col-md">
+			{{post.message}}
+	    </div>
+	</div>
+	<div class="row">
+		<div class="col-md-11">
+	    </div>
+	    <div class="col-md">
+	    	<a href="#"><img src="static/image/comments.png" class="reply-btn"></a>
+	    </div>
+	</div>
+	{% for comment in post.comments %}
+	<div class="container bg-light border comment">
+		<div class="row">
+			<div class="col-md text-center">
+				<a href="profile?zid={{comment.zid}}"><img src="static/photos/{{comment.photo}}" class="comm-photo"></a>
+			</div>
+			<div class="col-md-10">
+				<div><h5><a class="text-dark" href="profile?zid={{comment.zid}}">{{comment.full_name}}</a></h5></div>
+				<small>{{comment.time}}</small>
+			</div>
+			<div class="col-md text-center">
+				<img src="static/image/comments.png" class="comm-reply-btn">
+			</div>
+		</div>
+		<div class="row comm-message">
+			<div class="col-md">
+				{{comment.message}}
+			</div>
+		</div>
+		{% for subcomment in comment.subcomments %}
+		<div class="container border subcomment">
+			<div class="row">
+				<div class="col-md text-center">
+					<a href="profile?zid={{subcomment.zid}}"><img src="static/photos/{{subcomment.photo}}" class="sub-comm-photo"></a>
+				</div>
+				<div class="col-md-10">
+					<div><h6><a class="text-dark" href="profile?zid={{subcomment.zid}}">{{subcomment.full_name}}</a></h6></div>
+					<small>{{subcomment.time}}</small>
+				</div>
+				<div class="col-md">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md">
+				<small>{{subcomment.message}}</small>
+			</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+<link href="{{url_for('static', filename='css/profile.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+<div class="container bg-white">
+	<div class="row info">
+		<div class="col-md text-center">
+			<img src="static/image/pic.png" class="profile-head">
+		</div>
+		<div class="col-md-6 text-center">
+			<img src="static/image/card.png" class="profile-head">
+		</div>
+		<div class="col-md text-center">
+			<img src="static/image/list.png" class="profile-head">
+		</div>
+	</div>
+	<div class="row info">
+	    <div class="col-md text-center">
+	    	<div class="left">
+	    		<img src="static/photos/{{details.photo}}" class="photo">
+	    	</div>
+	    	<div class="left">
+	    		<img src="static/image/add.png" class="add_photo">
+	    	</div>
+	    </div>
+	    <div class="col-md-6 middle">
+	    	{% if details.zid != None %}
+			<div class="details">
+				<img src="static/image/info.png" class="friend_photo">
+				{{details.zid}}
+			</div>
+			{% endif %}
+			{% if details.full_name != None %}
+			<div class="details">
+				<img src="static/image/tag.png" class="friend_photo">
+				{{details.full_name}}
+			</div>
+			{% endif %}
+			{% if details.birthday != None %}
+			<div class="details">
+				<img src="static/image/birth.png" class="friend_photo">
+				{{details.birthday}}
+			</div>
+			{% endif %}
+			{% if details.program != None %}
+			<div class="details">
+				<img src="static/image/office.png" class="friend_photo">
+				{{details.program}}
+			</div>
+			{% endif %}
+			{% if details.home_suburb != None %}
+			<div class="details">
+				<img src="static/image/map.png" class="friend_photo">
+				{{details.home_suburb}}
+			</div>
+			{% endif %}
+		</div>
+		<div class="col-md">
+			{% if details.friends != None %}
+			{% for friend in details.friends %}
+			<div class="right">
+				<a href="profile?zid={{friend.zid}}"><img src="static/photos/{{friend.photo}}" class="friend_photo">{{friend.full_name}}</a>
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

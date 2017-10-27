@@ -1,0 +1,67 @@
+.post-body{
+	padding: 1rem;
+}
+
+.photo {
+	width: 4rem;
+}
+
+.photo:hover {
+	-moz-transition: width 0.3s;
+	-webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    cursor: pointer
+}
+
+.comm-photo {
+	width: 3rem;
+}
+
+.comm-photo:hover {
+	-moz-transition: width 0.3s;
+	-webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    cursor: pointer
+}
+
+.message-body{
+	margin: 1rem 0;
+}
+
+.reply-btn{
+	width: 1.8rem;
+	height: 1.8rem;
+}
+
+.comm-reply-btn{
+	width: 1.4rem;
+	height: 1.4rem;
+	margin-top: 1rem;
+}
+
+.comment{
+	margin: 0.6rem;
+	padding: 0.4rem 0;
+}
+
+.comm-message{
+	padding-top: 0.5rem;
+}
+
+.subcomment{
+	margin: 0.3rem;
+	padding: 0.2rem 0;
+	background-color: #eee;
+}
+
+.sub-comm-photo {
+	width: 2.5rem;
+	margin-top: 0.1rem;
+}
+
+.sub-comm-photo:hover {
+	-moz-transition: width 0.3s;
+	-webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    cursor: pointer
+}

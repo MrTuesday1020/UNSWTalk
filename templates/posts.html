@@ -1,0 +1,23 @@
+<link href="{{url_for('static', filename='css/index.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+{% for post in posts %}
+<div class="container post" onclick="location.href='postDetail?postseq={{post.postseq}}'">
+	<div class="row">
+		<div class="col">
+			<a href="profile?zid={{post.zid}}"><img src="static/photos/{{post.photo}}" class="photo"></a>
+	    </div>
+	    <div class="col-11">
+	    	<div><h3><a class="text-dark" href="profile?zid={{post.zid}}">{{post.full_name}}</a><h3></div>
+			<div>{{post.time}}</div>
+	    </div>
+	</div>
+	<div class="row message-body-search">
+		<div class="col">
+			{{post.message}}
+	    </div>
+	</div>
+</div>
+{% endfor %}
+{% endblock %}
