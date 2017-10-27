@@ -362,7 +362,6 @@ def findPostsByKeyword(keyword):
     return posts
 
 
-
 ############################# Flask #############################
 app = Flask(__name__)
 
