@@ -21,7 +21,7 @@
 		<div class="col-md-11">
 	    </div>
 	    <div class="col-md">
-	    	<a href="#"><img src="static/image/comments.png" class="reply-btn"></a>
+	    	<img data-id="{{post.postseq}}" src="static/image/comments.png" class="reply-btn openModal" data-toggle="modal" data-target="#myModal">
 	    </div>
 	</div>
 	{% for comment in post.comments %}
@@ -35,7 +35,7 @@
 				<small>{{comment.time}}</small>
 			</div>
 			<div class="col-md text-center">
-				<img src="static/image/comments.png" class="comm-reply-btn">
+				<img data-id="{{comment.commentseq}}" src="static/image/comments.png" class="comm-reply-btn openModal" data-toggle="modal" data-target="#myModal">
 			</div>
 		</div>
 		<div class="row comm-message">
@@ -66,4 +66,32 @@
 	</div>
 	{% endfor %}
 </div>
+
+<script type="text/javascript">
+		$(document).on("click", ".openModal", function () {
+		var mytoid = $(this).data('id');
+		$(".modal-body #toid").val( mytoid );
+	});
+</script>}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+	            <div class="modal-header removeborder">
+	                <h5 class="modal-title" id="myModalLabel">Add a comment</h5>
+	            </div>
+	            <form action="comment" method="post">
+	            	<div class="modal-body">
+	            		<input name="toid" id="toid" type="hidden" value=""/>
+	            		<textarea name="content" class="form-control" rows="3"></textarea>
+	            	</div>
+	            	<div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		                <button type="submit" class="btn btn-primary">Submit</button>
+	            	</div>
+            	</form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -8,7 +8,6 @@
 	-moz-transition: width 0.3s;
 	-webkit-transition: width 0.3s;
     transition: width 0.3s;
-    cursor: pointer;
 	background-color: #f8f9fa;
 }
 
@@ -34,4 +33,11 @@
 .reply-btn{
 	width: 1.8rem;
 	height: 1.8rem;
+}
+
+.reply-btn:hover{
+	-moz-transition: width 0.3s;
+	-webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    cursor: pointer
 }

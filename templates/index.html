@@ -3,8 +3,8 @@
 
 {% block body_contents %}
 {% for post in posts %}
-<div class="container post" onclick="location.href='postDetail?postseq={{post.postseq}}'">
-	<div class="row">
+<div class="container post">
+	<div class="row" onclick="location.href='postDetail?postseq={{post.postseq}}'">
 		<div class="col">
 			<a href="profile?zid={{post.zid}}"><img src="static/photos/{{post.photo}}" class="photo"></a>
 	    </div>
@@ -13,7 +13,7 @@
 			<div>{{post.time}}</div>
 	    </div>
 	</div>
-	<div class="row message-body">
+	<div class="row message-body" onclick="location.href='postDetail?postseq={{post.postseq}}'">
 		<div class="col">
 			{{post.message}}
 	    </div>
@@ -22,9 +22,34 @@
 		<div class="col-11">
 	    </div>
 	    <div class="col">
-	    	<a href="#"><img src="static/image/comments.png" class="reply-btn"></a>
+	    	<img data-id="{{post.postseq}}" data-toggle="modal" data-target="#myModal" src="static/image/comments.png" class="reply-btn openModal">
 	    </div>
 	</div>
+</div>
+<script type="text/javascript">
+		$(document).on("click", ".openModal", function () {
+		var mytoid = $(this).data('id');
+		$(".modal-body #toid").val( mytoid );
+	});
+</script>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+	            <div class="modal-header removeborder">
+	                <h5 class="modal-title" id="myModalLabel">Add a comment</h5>
+	            </div>
+	            <form action="comment" method="post">
+	            	<div class="modal-body">
+	            		<input name="toid" id="toid" type="hidden" value=""/>
+	            		<textarea name="content" class="form-control" rows="3"></textarea>
+	            	</div>
+	            	<div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		                <button type="submit" class="btn btn-primary">Submit</button>
+	            	</div>
+            	</form>
+        </div>
+    </div>
 </div>
 {% endfor %}
 {% endblock %}

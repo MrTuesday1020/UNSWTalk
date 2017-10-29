@@ -2,7 +2,12 @@
 {% extends "base.html" %}
 
 {% block body_contents %}
+{% if session['student'].background != None %}
+<div class="container bg-white" style="background-image: url('static/background/{{session['student'].background}}');">
+{% endif %}
+{% if session['student'].background == None %}
 <div class="container bg-white">
+{% endif %}
 	<div class="row info">
 		<div class="col-md text-center">
 			<img src="static/image/pic.png" class="profile-head">
@@ -63,11 +68,17 @@
 		</div>
 	</div>
 </div>
+{% if session['student'].profile != None %}
+<div class="container bg-white profile-body">
+	{{session['student'].profile}}
+</div>
+{% endif %}
 <div class="container btn-field">
 	<div class="row">
-		<div class="col text-center"><a class="btn btn-primary" href="">Edit Profile</a></div>
-		<div class="col text-center"><a class="btn btn-primary" href="">Change Password</a></div>
-		<div class="col text-center"><a class="btn btn-primary" href="">Change Photo</a></div>
+		<div class="col text-center"><a class="btn btn-primary" href="toEdit">Edit Profile</a></div>
+		<div class="col text-center"><a class="btn btn-primary" href="toChangePwd">Change Password</a></div>
+		<div class="col text-center"><a class="btn btn-primary" href="toChangePhoto">Change Photo</a></div>
+		<div class="col text-center"><a class="btn btn-primary" href="toChangeBack">Change Background</a></div>
 		<div class="col text-center"><a class="btn btn-danger" href="logout">Log out</a></div>
 	</div>
 </div>

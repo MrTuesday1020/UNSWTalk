@@ -33,10 +33,24 @@
 	height: 1.8rem;
 }
 
+.reply-btn:hover{
+	-moz-transition: width 0.3s;
+	-webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    cursor: pointer
+}
+
 .comm-reply-btn{
 	width: 1.4rem;
 	height: 1.4rem;
 	margin-top: 1rem;
+}
+
+.comm-reply-btn:hover{
+	-moz-transition: width 0.3s;
+	-webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    cursor: pointer
 }
 
 .comment{
@@ -64,4 +78,8 @@
 	-webkit-transition: width 0.3s;
     transition: width 0.3s;
     cursor: pointer
+}
+
+.removeborder{
+	border: 0px;
 }

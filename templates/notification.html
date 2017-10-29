@@ -1,0 +1,46 @@
+<link href="{{url_for('static', filename='css/notification.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+
+<div class="container bg-white notification-body">
+	<div class="row">
+		<div class="col-md text-center"><h3>Mentions</h3></div>
+	</div>
+	{% for mention in mentions %}
+ 	<div class="row slice">
+ 		<div class="col-md text-center">
+ 			<a href="profile?zid={{mention.mentionfrom}}">
+ 				<img src="static/photos/{{mention.photo}}" class="mention-photo">
+ 			</a>
+ 		</div>
+ 		<div class="col-md-10">
+ 			<h5><a class="text-dark" href="profile?zid={{mention.mentionfrom}}">{{mention.full_name}}</a> mentioned you in a {{mention.type}}</h5>
+ 		</div>
+ 		<div class="col-md text-center"></div>
+ 		<div class="col-md text-center"><a class="btn btn-primary" href="postDetail?postseq={{mention.postseq}}">More</a></div>
+ 	</div>
+ 	{% endfor %}
+</div>
+
+<div class="container bg-white notification-body">
+	<div class="row">
+		<div class="col-md text-center"><h3>Friend Requests</h3></div>
+	</div>
+	{% for request in requests %}
+ 	<div class="row slice">
+ 		<div class="col-md text-center">
+ 			<a href="profile?zid={{request.reqfrom}}">
+ 				<img src="static/photos/{{request.photo}}" class="mention-photo">
+ 			</a>
+ 		</div>
+ 		<div class="col-md-9">
+ 			<h5><a class="text-dark" href="profile?zid={{request.reqfrom}}">{{request.full_name}}</a> wants to add you!</h5>
+ 		</div>
+ 		<div class="col-md text-center"><a class="btn btn-danger" href="reject?zid={{request.reqfrom}}">Reject</a></div>
+ 		<div class="col-md text-center"><a class="btn btn-primary" href="accept?zid={{request.reqfrom}}">Accept</a></div>
+ 	</div>
+ 	{% endfor %}
+</div>
+
+{% endblock %}

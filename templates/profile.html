@@ -20,7 +20,15 @@
 	    		<img src="static/photos/{{details.photo}}" class="photo">
 	    	</div>
 	    	<div class="left">
-	    		<img src="static/image/add.png" class="add_photo">
+	    		{% if details.relationship == -1 %}
+	    		<a href="friend?zid={{details.zid}}"><img src="static/image/add.png" class="add_photo"></a>
+	    		{% endif %}
+	    		{% if details.relationship == 0 %}
+	    		<a href=""><img src="static/image/addwait.png" class="add_photo"></a>
+	    		{% endif %}
+	    		{% if details.relationship == 1 %}
+	    		<a href="unfriend?zid={{details.zid}}"><img src="static/image/added.png" class="add_photo"></a>
+	    		{% endif %}
 	    	</div>
 	    </div>
 	    <div class="col-md-6 middle">
@@ -66,4 +74,9 @@
 		</div>
 	</div>
 </div>
+{% if details.profile != None %}
+<div class="container bg-white profile-body">
+	{{details.profile}}
+</div>
+{% endif %}
 {% endblock %}

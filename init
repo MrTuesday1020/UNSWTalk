@@ -1,0 +1,207 @@
+import os
+import re
+import sqlite3
+from flask import Flask, render_template, session, request, redirect
+from shutil import copyfile
+
+############################# initial database and store data #############################
+# dataset
+students_dir = "dataset-medium";
+# some table names
+students_table = "students"
+friends_table = "friends"
+add_friends_table = "addfriends"
+posts_table = "posts"
+comments_table = "comments"
+subcomments_table = "subcomments"
+
+# create a database
+cx = sqlite3.connect('./UNSWtalk.db',check_same_thread = False)
+#cx = sqlite3.connect(":memory:", check_same_thread = False)
+cu = cx.cursor()
+
+def initDatabase():
+	# some sql statements
+	drop_students_table = "drop table if exists students"
+	drop_friends_table = "drop table if exists friends"
+	drop_add_friends_table = "drop table if exists add_friends"
+	drop_posts_table = "drop table if exists posts"
+	drop_comments_table = "drop table if exists comments"
+	drop_subcomments_table = "drop table if exists subcomments"
+	drop_mention_table = "drop table if exists mention"
+
+	# status 0: unactive, 1:active, 2:suspended
+	create_students_table = "create table if not exists students (id INTEGER not null primary key AUTOINCREMENT, zid text not null, password text not null, photo text not null, full_name text, program text, courses text, email text, birthday text, home_longitude text, home_latitude text, home_suburb text, profile text, background text, status int DEFAULT 1)"
+	create_friends_table = "create table if not exists friends (id INTEGER not null primary key AUTOINCREMENT, zid1 text not null, zid2 text not null)"
+	create_add_friends_table = "create table if not exists add_friends (id INTEGER not null primary key AUTOINCREMENT, reqfrom text not null, reqto text not null)"
+	create_posts_table = "create table if not exists posts (id INTEGER not null primary key AUTOINCREMENT, postseq text not null, zid text not null, message text not null, time text not null, latitude text, longitude text)"
+	create_comments_table = "create table if not exists comments (id INTEGER not null primary key AUTOINCREMENT, commentseq text not null, postseq text not null, zid text not null, message text, time text not null, latitude text, longitude text)"
+	create_subcomments_table = "create table if not exists subcomments (id INTEGER not null primary key AUTOINCREMENT, subcommentseq text not null, commentseq text not null, zid text not null, message text, time text not null, latitude text, longitude text)"
+	create_mention_table = "create table if not exists mention (id INTEGER not null primary key AUTOINCREMENT, mentionfrom text not null, mentionto text not null, mentionedplace text not null, time text not null)"
+
+	# create tables
+	cu.execute(drop_students_table)
+	cu.execute(create_students_table)
+	cu.execute(drop_friends_table)
+	cu.execute(create_friends_table)
+	cu.execute(drop_add_friends_table)
+	cu.execute(create_add_friends_table)
+	cu.execute(drop_posts_table)
+	cu.execute(create_posts_table)
+	cu.execute(drop_comments_table)
+	cu.execute(create_comments_table)
+	cu.execute(drop_subcomments_table)
+	cu.execute(create_subcomments_table)
+	cu.execute(drop_mention_table)
+	cu.execute(create_mention_table)
+	
+	
+	# store details and friends
+	friends_list = []
+	students = sorted(os.listdir(students_dir))
+	for student in students:
+		if re.match(r'^\..+', student):
+			continue
+		details_filename = os.path.join(students_dir, student, "student.txt")
+		with open(details_filename) as f:
+			info_flow = f.read()
+			details = info_flow.split('\n')
+			details = list(filter(lambda x: x != "", details))
+			keys = ""
+			values = ""
+			for detail in details:
+				key = detail.split(": ", 1)[0]
+				value = detail.split(": ", 1)[1]
+				if key == "friends":
+					friends = re.findall("z\d+", value)
+					for friend in friends:
+						friend_tuple = (student, friend)
+						friends_list.append(friend_tuple)
+				else:
+					keys += str(key) + ","
+					values += "\"" + str(value) + "\","
+		src_photo = os.path.join(students_dir, student, "img.jpg")
+		if os.path.isfile(src_photo):
+			new_phtot_name = str(student) + ".jpg"
+			dst_photo = os.path.join("static", "photos", new_phtot_name)
+			copyfile(src_photo,dst_photo)
+			keys += "photo" 
+			values += "\"" + new_phtot_name + "\""
+		else:
+			keys += "photo" 
+			values += "\"default.png\""
+		# insert student info into database one by one
+		insert_info_statement = "insert into students (" + keys + ") values (" + values + ");"
+		cu.execute(insert_info_statement)
+	
+	# split friends_list into added_friends and add_friends
+	added_friends = []
+	add_friends = []
+	for item in friends_list:
+		# if they want to add each other then they are friends already
+		temp = (item[1], item[0])
+		if temp in friends_list:
+			if temp not in added_friends:
+				added_friends.append(item)
+		else:
+			add_friends.append(item)
+	
+	# insert friends into database one by one
+	for friends in added_friends:
+		insert_friends_statement = "insert into friends (zid1, zid2) values (\"" + friends[0] + "\", \"" +  friends[1] + "\");"
+		cu.execute(insert_friends_statement)
+	# insert add friend requests into database one by one
+	for request in add_friends:
+		insert_add_friends_statement = "insert into add_friends (reqfrom, reqto) values (\"" + request[0] + "\", \"" +  request[1] + "\");"
+		cu.execute(insert_add_friends_statement)
+	   
+	# store messages
+	for student in students:
+		if re.match(r'^\..+', student):
+			continue
+		studentsdires = os.path.join(students_dir, student)
+		files = sorted(os.listdir(studentsdires))
+		for file in files:
+			if re.match(r'^\d+.+', file):
+				post_filename = os.path.join(students_dir, student, file)
+				with open(post_filename) as f:                    
+					post_flow = f.read()
+					post_details = post_flow.split('\n')
+					post_details = list(filter(lambda x: x != "", post_details))
+					post = {}
+					for line in post_details:
+						key = line.split(": ", 1)[0]
+						value = line.split(": ", 1)[1]
+#                        if key == "message":
+#                            zids = re.findall("z[\d]{7}", value)
+#                            for zid in zids:
+#                                mentionedname = findStudentByZid(zid)["full_name"]
+#                                newzid = "<a href=\"profile?zid=" + zid + "\">" + zid + "</a>"
+#                                value = re.sub(zid, newzid, value) 
+#                            value = re.sub(r'\'', '\'\'', value) 
+#                            value = re.sub(r'\"', '\"\"', value) 
+						if key == "from":
+							post["zid"] = value
+						elif key == "time":
+							value = value.split("+")[0]
+							value = re.sub(r'T', ' ', value) 
+							post[key] = value
+						else:
+							post[key] = value
+					#print post
+				
+					seq = file.split(".")[0]
+					filename = seq.split("-")
+					mentionedplace = student + "-" + seq
+				
+					columns = ""
+					values = ""
+					for key in post:
+						if key == "message":
+							zids = re.findall("z[\d]{7}", post[key])
+							for mentionedzid in zids:
+								insert_mention_statement = "insert into mention (mentionfrom, mentionto, mentionedplace, time) values ('" + post['zid'] + "', '" + mentionedzid + "', '" + mentionedplace + "','" + post['time'] + "')"
+								cu.execute(insert_mention_statement)
+							post[key] = re.sub(r'\'', '\'\'', post[key])
+							post[key] = re.sub(r'\"', '\"\"', post[key]) 
+						columns += key + ", "
+						values += "'" + post[key] + "', "
+					
+					if len(filename) == 1:
+						postseq = student + "-" + filename[0]
+						columns += "postseq"
+						values += "'" + postseq + "'"
+						insert_post_statement = "insert into posts (" + columns + ") values (" + values + ");"
+						#print insert_post_statement
+						cu.execute(insert_post_statement)
+					elif len(filename) == 2:
+						postseq = student + "-" + filename[0]
+						columns += "postseq, "
+						values += "'" + postseq + "', "
+						commentseq = student + "-" + filename[0] + "-" + filename[1]
+						columns += "commentseq"
+						values += "'" + commentseq + "'"
+						insert_comments_statement = "insert into comments (" + columns + ") values (" + values + ");"
+						#print insert_post_statement
+						cu.execute(insert_comments_statement)
+					elif len(filename) == 3:
+						commentseq = student + "-" + filename[0] + "-" + filename[1]
+						columns += "commentseq, "
+						values += "'" + commentseq + "', "
+						subcommentseq = student + "-" + filename[0] + "-" + filename[1] + "-" + filename[2]
+						columns += "subcommentseq"
+						values += "'" + subcommentseq + "'"
+						insert_subcomments_statement = "insert into subcomments (" + columns + ") values (" + values + ");"
+						#print insert_post_statement
+						cu.execute(insert_subcomments_statement)
+					else:
+						print("valid posts!")
+						continue
+			else:
+				continue
+	
+	print("Database initialized done!")
+	
+initDatabase()
+cx.commit()
+cx.close()

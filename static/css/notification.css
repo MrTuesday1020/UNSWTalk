@@ -1,0 +1,13 @@
+.notification-body{
+	padding: 1rem 1rem 0.5rem 1rem;
+	margin-bottom: 2rem;
+}
+
+.mention-photo{
+	width: 2rem;
+	height: 2rem
+}
+
+.slice {
+	margin-top: 1rem;
+}

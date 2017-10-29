@@ -1,0 +1,92 @@
+<link href="{{url_for('static', filename='css/edit.css')}}") rel="stylesheet">
+{% extends "base.html" %}
+
+{% block body_contents %}
+<div class="container bg-white edit-body">
+	<form action="edit" method="post">
+	 	<div class="form-group row">
+	    	<label for="staticZid" class="col-sm-2 col-form-label">Zid</label>
+		    <div class="col-sm-10">
+		     	<input name="zid" type="text" readonly class="form-control-plaintext" id="staticZid" value="{{session['student'].zid}}">
+		    </div>
+	  	</div>
+	  	<div class="form-group row">
+	    	<label for="staticName" class="col-sm-2 col-form-label">Name</label>
+		    <div class="col-sm-10">
+		     	<input name="full_name" type="text" readonly class="form-control-plaintext" id="staticName" value="{{session['student'].full_name}}">
+		    </div>
+	  	</div>
+	  	<div class="form-group row">
+	    	<label for="email" class="col-sm-2 col-form-label">Email</label>
+	   		<div class="col-sm-10">
+	   			{% if session['student'].email != None %}
+	    		<input name="email" type="email" class="form-control" id="email" value="{{session['student'].email}}">
+	    		{% endif %}
+	    		{% if session['student'].email == None %}
+	    		<input name="email" type="email" class="form-control" id="email">
+	    		{% endif %}
+	    	</div>
+		</div>
+		<div class="form-group row">
+			<label for="program" class="col-sm-2 col-form-label">Program</label>
+			<div class="col-sm-10">
+				{% if session['student'].program != None %}
+	    		<input name="program" type="text" class="form-control" id="program" value="{{session['student'].program}}">
+	    		{% endif %}
+	    		{% if session['student'].program == None %}
+	    		<input name="program" type="text" class="form-control" id="program"">
+	    		{% endif %}
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="birthday" class="col-sm-2 col-form-label">Birthday</label>
+			<div class="col-sm-10">
+				{% if session['student'].birthday != None %}
+	    		<input name="birthday" type="text" class="form-control" id="birthday" value="{{session['student'].birthday}}">
+	    		{% endif %}
+	    		{% if session['student'].birthday ==None %}
+	    		<input name="birthday" type="text" class="form-control" id="birthday">
+	    		{% endif %}
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="location" class="col-sm-2 col-form-label">Location</label>
+			<div class="col-sm-10">
+				{% if session['student'].home_suburb != None %}
+	    		<input name="home_suburb" type="text" class="form-control" id="location" value="{{session['student'].home_suburb}}">
+	    		{% endif %}
+	    		{% if session['student'].home_suburb == None %}
+	    		<input name="home_suburb" type="text" class="form-control" id="location">
+	    		{% endif %}
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="courses" class="col-sm-2 col-form-label">Courses</label>
+			<div class="col-sm-10">
+				{% if session['student'].courses != None %}
+				<textarea name="courses" type="text" class="form-control" rows="5" id="courses" >{{session['student'].courses}}</textarea>
+				{% endif %}
+				{% if session['student'].courses == None %}
+				<textarea name="courses" type="text" class="form-control" rows="5" id="courses" ></textarea>
+				{% endif %}
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="profile" class="col-sm-2 col-form-label">Profile</label>
+			<div class="col-sm-10">
+				{% if session['student'].profile != None %}
+				<textarea name="profile" type="text" class="form-control" rows="5" id="profile">{{session['student'].profile}}</textarea>
+				{% endif %}
+				{% if session['student'].profile == None %}
+				<textarea name="profile" type="text" class="form-control" rows="5" id="profile"></textarea>
+				{% endif %}
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col text-center">
+				<button type="submit" class="btn btn-primary">Confirm</button>
+			</div>
+		</div>
+		</form>
+</div>
+{% endblock %}
